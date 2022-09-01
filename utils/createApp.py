@@ -64,27 +64,27 @@ def createApp(__name__):
 
     @app.after_request
     def after_request(response):
-        timestamp = datetime.strftime('[%Y-%b-%d %H:%M]')
-        day = datetime.strftime('%Y-%b-%d')
+        timestamp = str(datetime.now().strftime('[%Y-%b-%d %H:%M]'))
+        day = str(datetime.now().strftime('%Y-%b-%d'))
 
         if not exists(f'./logs/{day}.txt'):
             open(f'./logs/{day}.txt', 'w')
 
         with open(f'./logs/{day}.txt','a') as f:
-            f.write('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
+            f.write(f'{timestamp}, {request.remote_addr}, {request.method}, {request.scheme}, {request.full_path}, {response.status}' + '\n')
 
         return response
 
     @app.errorhandler(Exception)
     def exceptions(e):
-        timestamp = datetime.strftime('[%Y-%b-%d %H:%M]')
-        day = datetime.strftime('%Y-%b-%d')
+        timestamp = str(datetime.now().strftime('[%Y-%b-%d %H:%M]'))
+        day = str(datetime.now().strftime('%Y-%b-%d'))
 
         if not exists(f'./logs/{day}.txt'):
             open(f'./logs/{day}.txt', 'w')
 
         with open(f'./logs/{day}.txt','a') as f:
-            f.write('%s %s %s %s %s %s', timestamp, request.remote_addr, request.method, request.scheme, request.full_path, e.status)
+            f.write(f'{timestamp}, {request.remote_addr}, {request.method}, {request.scheme}, {request.full_path}, {e.status}' + '\n')
 
         return e.status_code
 
