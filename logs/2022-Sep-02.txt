@@ -1,0 +1,2 @@
+[2022-Sep-02 12:29], 127.0.0.1, POST, http, /api/getToken?, 400 BAD REQUEST
+[2022-Sep-02 12:29], 127.0.0.1, GET, http, /api/getToken?, 400 BAD REQUEST

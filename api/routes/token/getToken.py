@@ -3,7 +3,7 @@ from flask_restful import Resource
 from flask import request
 
 class getToken(Resource):
-    def post(self):
+    def get(self):
         try:
             if request.content_type == None:
                 return { 'error': 'Content Type error' }, 400
