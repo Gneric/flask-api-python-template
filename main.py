@@ -1,15 +1,11 @@
-from utils.createApp import createApp
-from api.routes.routesInterface import Routes
+from app.createApp import createApp
+from api.router.routes import Routes
 from waitress import serve
 
 app, api = createApp(__name__)
-rts = Routes()
+router = Routes()
 
-# Login
-api.add_resource(rts._token, '/api/getToken')
-
-# Ejemplo
-# api.add_resource(rts._alerts, '/api/protected/alerts/getAlerts')
+api.add_resource(router._token, '/api/getToken')
 
 if __name__ == "__main__":
     #serve(app, host="0.0.0.0", port=3010, threads=8) # Solo para produccion

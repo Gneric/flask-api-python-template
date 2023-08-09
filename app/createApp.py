@@ -13,14 +13,12 @@ from flask_jwt_extended import (
 from datetime import datetime 
 from os.path import exists
 
-from constants import api_config
-
-
+from app.config import app_config
 
 def createApp(__name__):
 
     app = Flask(__name__)
-    app.config.from_object(api_config)
+    app.config.from_object(app_config)
     jwt = JWTManager(app)
     CORS(app, expose_headers=["filename"], resources={r"*": {"origins": "*"}})
 
@@ -61,32 +59,6 @@ def createApp(__name__):
     def needs_fresh_token_loader(jwt_header):
         response = { "error" : "token invalido" }, 401
         return response
-
-    @app.after_request
-    def after_request(response):
-        timestamp = str(datetime.now().strftime('[%Y-%b-%d %H:%M]'))
-        day = str(datetime.now().strftime('%Y-%b-%d'))
-
-        if not exists(f'./logs/{day}.txt'):
-            open(f'./logs/{day}.txt', 'w')
-
-        with open(f'./logs/{day}.txt','a') as f:
-            f.write(f'{timestamp}, {request.remote_addr}, {request.method}, {request.scheme}, {request.full_path}, {response.status}' + '\n')
-
-        return response
-
-    @app.errorhandler(Exception)
-    def exceptions(e):
-        timestamp = str(datetime.now().strftime('[%Y-%b-%d %H:%M]'))
-        day = str(datetime.now().strftime('%Y-%b-%d'))
-
-        if not exists(f'./logs/{day}.txt'):
-            open(f'./logs/{day}.txt', 'w')
-
-        with open(f'./logs/{day}.txt','a') as f:
-            f.write(f'{timestamp}, {request.remote_addr}, {request.method}, {request.scheme}, {request.full_path}, {e.status}' + '\n')
-
-        return e.status_code
 
     api = Api(app)
     return app, api
